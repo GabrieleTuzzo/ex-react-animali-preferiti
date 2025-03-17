@@ -31,31 +31,78 @@
 
             const lista_animali = document.querySelector('.lista-animali');
 
+            function Modal({
+                title,
+                content,
+                show = false,
+                onConfirm = () => {},
+                onClose = () => {},
+            }) {
+                return (
+                    show &&
+                    ReactDOM.createPortal(
+                        <div className="modal-container">
+                            <div className="modal">
+                                <h2>{title}</h2>
+                                {content}
+                                <button onClick={onConfirm}>Conferma</button>
+                                <button onClick={onClose}>Annulla</button>
+                            </div>
+                        </div>,
+                        document.body
+                    )
+                );
+            }
+
             const MyComponent = () => {
                 const { useState } = React;
 
                 const [animals, setAnimals] = useState([]);
+                const [show, setShow] = useState(false);
+                const [newAnimal, setNewAnimal] = useState('');
 
-                const randomAnimals = [
-                    'Cane',
-                    'Gatto',
-                    'Pappagallo',
-                    'Cavallo',
-                    'Panda',
-                ];
+                // const randomAnimals = [
+                //     'Cane',
+                //     'Gatto',
+                //     'Pappagallo',
+                //     'Cavallo',
+                //     'Panda',
+                // ];
 
-                const addAnimal = () => {
+                const addAnimal = (animal) => {
                     // random number between 0 and randomAnimals array length
-                    const randomNumber = Math.floor(
-                        Math.random() * randomAnimals.length
-                    );
+                    // const randomNumber = Math.floor(
+                    //     Math.random() * randomAnimals.length
+                    // );
+                    // setAnimals([...animals, randomAnimals[randomNumber]]);
 
-                    setAnimals([...animals, randomAnimals[randomNumber]]);
+                    setAnimals([...animals, animal]);
                 };
 
                 return (
                     <>
-                        <button onClick={addAnimal}>Aggiungi Animale</button>
+                        <button onClick={() => setShow(true)}>
+                            Aggiungi Animale
+                        </button>
+                        <Modal
+                            title="Aggiungi Animale"
+                            content={
+                                <input
+                                    type="text"
+                                    value={newAnimal}
+                                    onChange={(e) =>
+                                        setNewAnimal(e.target.value)
+                                    }
+                                />
+                            }
+                            show={show}
+                            onConfirm={() => {
+                                addAnimal(newAnimal);
+                                setNewAnimal('');
+                                setShow(false);
+                            }}
+                            onClose={() => setShow(false)}
+                        />
                         <details>
                             <summary>
                                 <strong>Animali</strong>
