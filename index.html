@@ -32,7 +32,11 @@
             const lista_animali = document.querySelector('.lista-animali');
 
             const MyComponent = () => {
-                const animals = [
+                const { useState } = React;
+
+                const [animals, setAnimals] = useState([]);
+
+                const randomAnimals = [
                     'Cane',
                     'Gatto',
                     'Pappagallo',
@@ -40,17 +44,29 @@
                     'Panda',
                 ];
 
+                const addAnimal = () => {
+                    // random number between 0 and randomAnimals array length
+                    const randomNumber = Math.floor(
+                        Math.random() * randomAnimals.length
+                    );
+
+                    setAnimals([...animals, randomAnimals[randomNumber]]);
+                };
+
                 return (
-                    <details>
-                        <summary>
-                            <strong>Animali</strong>
-                        </summary>
-                        <ul>
-                            {animals.map((animal) => {
-                                return <li>{animal}</li>;
-                            })}
-                        </ul>
-                    </details>
+                    <>
+                        <button onClick={addAnimal}>Aggiungi Animale</button>
+                        <details>
+                            <summary>
+                                <strong>Animali</strong>
+                            </summary>
+                            <ul>
+                                {animals.map((animal) => {
+                                    return <li>{animal}</li>;
+                                })}
+                            </ul>
+                        </details>
+                    </>
                 );
             };
 
